@@ -65,19 +65,27 @@ class CedulaData:
     """Estructura de datos completa para una cédula sintética."""
 
     cedula_number: str
+    previous_cedula_number: str
     first_name: str
     last_name: str
     full_name: str
     gender_code: str
     gender_label: str
     birth_date: date
+    birth_place: str
     nationality: str
     marital_status: str
     profession: str
     address: str
     province: str
+    residence_address: str
+    municipality: str
+    electoral_college: str
+    college_location: str
+    birth_registration: str
     issue_date: date
     expiration_date: date
+    signature: str = "NO FIRMA"
     mrz_line1: str = field(default="")
     mrz_line2: str = field(default="")
     mrz_line3: str = field(default="")
@@ -172,19 +180,27 @@ class DominicanDataGenerator:
 
         data = CedulaData(
             cedula_number=self.generate_cedula_number(),
+            previous_cedula_number=self.generate_cedula_number(),
             first_name=first_name,
             last_name=last_name,
             full_name=f"{first_name} {last_name}",
             gender_code=gender_code,
             gender_label=gender_label,
             birth_date=birth_date,
+            birth_place=self._rng.choice(DOMINICAN_PROVINCES),
             nationality=NATIONALITY,
             marital_status=self._rng.choice(MARITAL_STATUSES),
             profession=self._rng.choice(PROFESSIONS),
             address=self.generate_address(),
             province=self._rng.choice(DOMINICAN_PROVINCES),
+            residence_address=self.generate_address(),
+            municipality=self._rng.choice(DOMINICAN_PROVINCES),
+            electoral_college=f"COLEGIO ELECTORAL {self._rng.randint(1, 9999):04d}",
+            college_location=f"Centro Educativo {self._rng.choice(['Duarte', 'Independencia', 'Las Americas', 'Quisqueya'])}",
+            birth_registration=f"REGISTRO DE NACIMIENTO {self._rng.randint(100000, 999999)}",
             issue_date=issue_date,
             expiration_date=expiration_date,
+            signature="NO FIRMA",
         )
         data.mrz_line1, data.mrz_line2, data.mrz_line3 = self.build_mrz(data)
         return data

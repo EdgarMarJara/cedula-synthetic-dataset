@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+synthetic_dataset/
+output_*/
+*.jpg
+*.png
+!assets/**
+.venv/

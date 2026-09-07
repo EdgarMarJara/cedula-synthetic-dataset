@@ -56,6 +56,7 @@ PROFESSIONS = [
 MARITAL_STATUSES = ["Soltero/a", "Casado/a", "Divorciado/a", "Viudo/a", "Unión Libre"]
 
 GENDERS = [("M", "Masculino"), ("F", "Femenino")]
+BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
 
 NATIONALITY = "Dominicana"
 
@@ -71,6 +72,7 @@ class CedulaData:
     full_name: str
     gender_code: str
     gender_label: str
+    blood_group: str
     birth_date: date
     birth_place: str
     nationality: str
@@ -186,6 +188,7 @@ class DominicanDataGenerator:
             full_name=f"{first_name} {last_name}",
             gender_code=gender_code,
             gender_label=gender_label,
+            blood_group=self._rng.choice(BLOOD_GROUPS),
             birth_date=birth_date,
             birth_place=self._rng.choice(DOMINICAN_PROVINCES),
             nationality=NATIONALITY,

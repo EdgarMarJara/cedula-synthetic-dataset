@@ -11,6 +11,7 @@ def test_generate_returns_all_expected_fields():
     assert re.match(r"^\d{3}-\d{8}$", data.cedula_number)
     assert data.full_name.strip() != ""
     assert data.gender_code in ("M", "F")
+    assert data.blood_group in {"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"}
     assert data.nationality == "Dominicana"
     assert data.address.strip() != ""
     assert data.marital_status != ""

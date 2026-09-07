@@ -15,6 +15,20 @@ from .storage import StorageManager
 from .templates import load_or_create_templates
 
 
+def _center_on_canvas(image: Image.Image, margin: int) -> Image.Image:
+    """Centra una cara de la cedula en un lienzo exterior uniforme."""
+    if margin == 0:
+        return image
+    canvas = Image.new(
+        "RGB",
+        (image.width + margin * 2, image.height + margin * 2),
+        (255, 255, 255),
+    )
+    offset = ((canvas.width - image.width) // 2, (canvas.height - image.height) // 2)
+    canvas.paste(image, offset)
+    return canvas
+
+
 def _generate_placeholder_face(width: int = 260, height: int = 320, seed: Optional[int] = None) -> Image.Image:
     """Genera una "cara" sintética simple (silueta) cuando no se provee una foto real.
 
@@ -54,7 +68,10 @@ class DominicanIDGenerator:
         back_template_path: Optional[str] = None,
         augmentation_config: Optional[AugmentationConfig] = None,
         seed: Optional[int] = None,
+        canvas_margin: int = 48,
     ):
+        if canvas_margin < 0:
+            raise ValueError("canvas_margin debe ser mayor o igual a 0")
         self.front_template, self.back_template = load_or_create_templates(
             front_template_path, back_template_path
         )
@@ -63,6 +80,7 @@ class DominicanIDGenerator:
         self.augmentor = ImageAugmentor(config=augmentation_config, seed=seed)
         self.storage = StorageManager(output_dir)
         self._rng = random.Random(seed)
+        self.canvas_margin = canvas_margin
 
     def generate_data(self) -> CedulaData:
         """Genera únicamente los datos sintéticos de una cédula."""
@@ -76,7 +94,10 @@ class DominicanIDGenerator:
             face_photo = _generate_placeholder_face(seed=self._rng.random())
         front = self.renderer.render_front(self.front_template, data, face_photo)
         back = self.renderer.render_back(self.back_template, data)
-        return front, back
+        return (
+            _center_on_canvas(front, self.canvas_margin),
+            _center_on_canvas(back, self.canvas_margin),
+        )
 
     def augment(self, image: Image.Image) -> Image.Image:
         """Aplica el pipeline de aumentación a una imagen ya renderizada."""

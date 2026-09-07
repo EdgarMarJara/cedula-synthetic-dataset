@@ -20,6 +20,9 @@ FRONT_FIELD_POSITIONS = {
     "issue_date": (380, 505),
     "expiration_date": (380, 545),
     "signature": (380, 615),
+    "marital_status": (680, 415),
+    "blood_group": (820, 415),
+    "gender_code": (680, 465),
 }
 
 FRONT_FIELD_LABELS = {
@@ -32,6 +35,9 @@ FRONT_FIELD_LABELS = {
     "issue_date": "FECHA DE EXPEDICIÓN",
     "expiration_date": "FECHA DE VENCIMIENTO",
     "signature": "FIRMA",
+    "gender_code": "SEXO",
+    "marital_status": "ESTADO CIVIL",
+    "blood_group": "GRUPO SANGUÍNEO",
 }
 
 BACK_FIELD_POSITIONS = {
@@ -124,6 +130,9 @@ class IDRenderer:
             "issue_date": data.issue_date.strftime("%d/%m/%Y"),
             "expiration_date": data.expiration_date.strftime("%d/%m/%Y"),
             "signature": data.signature,
+            "gender_code": data.gender_code,
+            "marital_status": data.marital_status,
+            "blood_group": data.blood_group,
         }
 
         number_label = "NUMERO DE CEDULA"
@@ -136,6 +145,8 @@ class IDRenderer:
             if key in {"signature", "expiration_date"}:
                 continue
             max_width = 540 if key in {"first_name", "last_name", "birth_place"} else 270
+            if key in {"gender_code", "marital_status", "blood_group"}:
+                max_width = 150
             value_font = _fit_font(field_values[key], max_width, self.value_font.size)
             draw.text((x, y - 16), label, fill=LABEL_COLOR, font=self.label_font)
             draw.text((x, y), field_values[key], fill=TEXT_COLOR, font=value_font)
@@ -145,6 +156,9 @@ class IDRenderer:
         validity_text = f"VIGENCIA HASTA {field_values['expiration_date']}"
         validity_font = _fit_font(validity_text, 300, self.value_font.size)
         draw.text((image_data_start_x, 545), validity_text, fill=TEXT_COLOR, font=validity_font)
+
+        if face_photo is not None:
+            self.paste_face_photo(img, face_photo)
 
         return img
 

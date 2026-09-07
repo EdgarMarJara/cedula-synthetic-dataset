@@ -14,7 +14,7 @@ import math
 from pathlib import Path
 from typing import Optional
 
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont, ImageOps
 
 # Dimensiones estándar de una tarjeta ID-1 a 300 DPI aprox.
 CARD_WIDTH = 1011
@@ -73,17 +73,23 @@ def _paste_faded_monument(img: Image.Image, width: int) -> None:
 
 
 def _paste_faded_duarte(img: Image.Image, width: int, height: int) -> None:
-    duarte_path = Path(__file__).resolve().parent.parent / "elementos" / "Juan Pablo Duarte.png"
+    duarte_path = Path(__file__).resolve().parent.parent / "elementos" / "Juan Pablo II.png"
     if not duarte_path.exists():
         return
-    source = Image.open(duarte_path).convert("RGB")
-    crop = source.crop((source.width // 10, source.height // 5, source.width * 6 // 10, source.height))
-    crop.thumbnail((245, 245), Image.Resampling.LANCZOS)
-    grayscale = ImageOps.grayscale(crop)
+    source = Image.open(duarte_path).convert("RGBA")
+    source.thumbnail((360, 360), Image.Resampling.LANCZOS)
+    grayscale = ImageOps.grayscale(source)
+    grayscale = grayscale.filter(ImageFilter.GaussianBlur(radius=2.5))
     tinted = ImageOps.colorize(grayscale, (32, 76, 145), (190, 215, 250)).convert("RGBA")
-    alpha = grayscale.point(lambda value: max(0, min(125, (255 - value) // 2)))
+    alpha = grayscale.point(lambda value: max(0, min(65, (255 - value) // 4)))
+    if source.getbands() == ("R", "G", "B", "A"):
+        alpha = ImageChops.multiply(alpha, source.getchannel("A"))
     tinted.putalpha(alpha)
-    img.paste(tinted, (width - tinted.width - 22, height - tinted.height - 38), tinted)
+    img.paste(
+        tinted,
+        (width - tinted.width - 28, height - tinted.height - 10),
+        tinted,
+    )
 
 
 def _paste_blue_jce_logo(img: Image.Image) -> None:

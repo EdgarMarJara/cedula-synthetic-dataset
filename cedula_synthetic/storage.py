@@ -19,6 +19,7 @@ METADATA_FIELDS = [
     "full_name",
     "gender_code",
     "gender_label",
+    "blood_group",
     "birth_date",
     "nationality",
     "marital_status",

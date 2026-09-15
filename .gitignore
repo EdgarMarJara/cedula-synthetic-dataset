@@ -10,7 +10,10 @@ output_*/
 !elementos/**
 .venv/
 
-# Vistas previas sueltas generadas al probar el template BR.
-/cedula_br_front.jpeg
-/cedula_br_back.jpeg
+# Muestras de referencia del template BR (frente/dorso y ejemplo completo).
+!/cedula_br_front.jpeg
+!/cedula_br_back.jpeg
+!/cedula_br_template_front.png
+!/cedula_br_template_back.png
+!/ejemplo_br.png
 

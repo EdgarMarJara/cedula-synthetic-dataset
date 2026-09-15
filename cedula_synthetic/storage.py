@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import csv
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Optional
 
 from PIL import Image
 
@@ -38,15 +38,46 @@ METADATA_FIELDS = [
     "mrz_line3",
 ]
 
+BRAZIL_METADATA_FIELDS = [
+    "id",
+    "front_image",
+    "back_image",
+    "registro_geral",
+    "full_name",
+    "social_name",
+    "gender_code",
+    "gender_label",
+    "birth_date",
+    "birth_place",
+    "nationality",
+    "father_name",
+    "mother_name",
+    "issuer_organ",
+    "issue_place",
+    "issue_date",
+    "expiration_date",
+    "mrz_line1",
+    "mrz_line2",
+    "mrz_line3",
+]
+
 
 class StorageManager:
     """Guarda las imágenes generadas y un CSV con los metadatos asociados."""
 
-    def __init__(self, output_dir: str, metadata_filename: str = "metadata.csv"):
+    metadata_fields: list[str] = METADATA_FIELDS
+
+    def __init__(
+        self,
+        output_dir: str,
+        metadata_filename: str = "metadata.csv",
+        metadata_fields: Optional[list[str]] = None,
+    ):
         self.output_dir = Path(output_dir)
         self.front_dir = self.output_dir / "front"
         self.back_dir = self.output_dir / "back"
         self.metadata_path = self.output_dir / metadata_filename
+        self.metadata_fields = metadata_fields or METADATA_FIELDS
         self._records: list[dict] = []
 
         self.front_dir.mkdir(parents=True, exist_ok=True)
@@ -81,7 +112,7 @@ class StorageManager:
 
     def validate_record(self, record: dict) -> bool:
         """Valida que un registro contenga todos los campos requeridos y no vacíos."""
-        for field_name in METADATA_FIELDS:
+        for field_name in self.metadata_fields:
             if field_name not in record:
                 return False
             value = record[field_name]
@@ -92,10 +123,10 @@ class StorageManager:
     def write_metadata(self) -> Path:
         """Escribe todos los registros acumulados en el CSV de metadatos."""
         with open(self.metadata_path, "w", newline="", encoding="utf-8") as fh:
-            writer = csv.DictWriter(fh, fieldnames=METADATA_FIELDS)
+            writer = csv.DictWriter(fh, fieldnames=self.metadata_fields)
             writer.writeheader()
             for record in self._records:
-                writer.writerow({key: record.get(key, "") for key in METADATA_FIELDS})
+                writer.writerow({key: record.get(key, "") for key in self.metadata_fields})
         return self.metadata_path
 
     @property

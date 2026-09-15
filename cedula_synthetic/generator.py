@@ -99,6 +99,22 @@ class DominicanIDGenerator:
             _center_on_canvas(back, self.canvas_margin),
         )
 
+    def render_half_cut(
+        self, data: CedulaData, face_photo: Optional[Image.Image] = None
+    ) -> tuple[Image.Image, Image.Image]:
+        """Divide el anverso por la zona de la firma del titular.
+
+        El corte se hace justo debajo de la firma y la validez del documento,
+        manteniendo el anverso completo en dos piezas verticales.
+        """
+        front, _ = self.render(data, face_photo=face_photo)
+        cut_y = self.canvas_margin + 570
+        cut_y = max(1, min(front.height - 1, cut_y))
+
+        top = front.crop((0, 0, front.width, cut_y))
+        bottom = front.crop((0, cut_y, front.width, front.height))
+        return top, bottom
+
     def augment(self, image: Image.Image) -> Image.Image:
         """Aplica el pipeline de aumentación a una imagen ya renderizada."""
         return self.augmentor.apply(image)

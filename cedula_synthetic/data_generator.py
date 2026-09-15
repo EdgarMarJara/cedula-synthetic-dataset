@@ -110,6 +110,15 @@ def _mrz_fill(text: str, length: int) -> str:
     return normalized
 
 
+def _safe_date(year: int, month: int, day: int) -> date:
+    """Crea una fecha ajustando el 29 de febrero en años no bisiestos."""
+    while True:
+        try:
+            return date(year, month, day)
+        except ValueError:
+            day -= 1
+
+
 class DominicanDataGenerator:
     """Genera datos sintéticos y consistentes para cédulas dominicanas."""
 
@@ -152,12 +161,12 @@ class DominicanDataGenerator:
         birth_date = self.faker.date_of_birth(minimum_age=18, maximum_age=85)
         # La expedición debe ser posterior a la fecha en que la persona cumplió
         # 18 años, y no puede ser futura.
-        earliest_issue = date(birth_date.year + 18, birth_date.month, birth_date.day)
+        earliest_issue = _safe_date(birth_date.year + 18, birth_date.month, birth_date.day)
         if earliest_issue > today:
             earliest_issue = today
         issue_days_range = max((today - earliest_issue).days, 0)
         issue_date = earliest_issue + timedelta(days=self._rng.randint(0, issue_days_range))
-        expiration_date = date(issue_date.year + 10, issue_date.month, issue_date.day)
+        expiration_date = _safe_date(issue_date.year + 10, issue_date.month, issue_date.day)
         return birth_date, issue_date, expiration_date
 
     def build_mrz(self, data: "CedulaData") -> tuple[str, str, str]:

@@ -7,4 +7,10 @@ output_*/
 *.jpg
 *.png
 !assets/**
+!elementos/**
 .venv/
+
+# Vistas previas sueltas generadas al probar el template BR.
+/cedula_br_front.jpeg
+/cedula_br_back.jpeg
+

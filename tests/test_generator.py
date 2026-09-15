@@ -93,6 +93,30 @@ def test_generate_batch_creates_csv_and_images(tmp_path):
     assert len(cedula_numbers) == 3
 
 
+def test_render_half_cut_splits_at_signature_line(tmp_path):
+    generator = DominicanIDGenerator(output_dir=str(tmp_path / "out"), seed=17)
+    data = generator.generate_data()
+    top, bottom = generator.render_half_cut(data)
+
+    assert top.size[0] == generator.front_template.width + generator.canvas_margin * 2
+    assert bottom.size[0] == generator.front_template.width + generator.canvas_margin * 2
+    assert top.size[1] < generator.front_template.height + generator.canvas_margin * 2
+    assert bottom.size[1] > 0
+    assert top.size[1] + bottom.size[1] == generator.front_template.height + generator.canvas_margin * 2
+
+
+def test_brazil_templates_can_be_created_from_reference_layout(tmp_path):
+    from cedula_synthetic.brasil_template import create_brazil_front_template, create_brazil_back_template
+
+    front = create_brazil_front_template()
+    back = create_brazil_back_template()
+
+    assert front.size == (900, 500)
+    assert back.size == (900, 500)
+    assert front.getbbox() is not None
+    assert back.getbbox() is not None
+
+
 def test_generate_batch_rejects_non_positive_samples(tmp_path):
     generator = DominicanIDGenerator(output_dir=str(tmp_path / "out"), seed=13)
     try:

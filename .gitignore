@@ -7,4 +7,6 @@ output_*/
 *.jpg
 *.png
 !assets/**
+!output_single_example/
+!output_single_example/**
 .venv/

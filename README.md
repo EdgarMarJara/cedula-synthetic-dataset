@@ -38,10 +38,13 @@ python examples/generate_batch_example.py --num-samples 1000 --output-dir synthe
 - `cedula_synthetic/augmentation.py` – pipeline de aumentación: rotación, perspectiva, brillo/contraste, ruido gaussiano, desenfoque e iluminación.
 - `cedula_synthetic/storage.py` – guarda imágenes y metadatos (CSV) con validación básica.
 - `cedula_synthetic/generator.py` – clase principal `DominicanIDGenerator` que integra todo el pipeline.
+- `assets/` – templates sintéticos PNG de anverso y reverso incluidos en el repositorio.
 - `examples/` – scripts de ejemplo de uso individual y en batch.
 - `tests/` – pruebas unitarias de cada módulo.
 
 > **Nota:** No se distribuye ninguna imagen de cédula real ni rostros reales. Los templates y las fotos de rostro se generan de forma programática para evitar cualquier problema de privacidad o derechos de imagen. Si dispones de un template propio (por ejemplo, un diseño oficial en blanco), puedes pasar sus rutas con `front_template_path` / `back_template_path` al crear el `DominicanIDGenerator`.
+
+Los archivos de `assets/` son únicamente templates sintéticos generados por el proyecto; no representan documentos oficiales.
 
 ## Tests
 

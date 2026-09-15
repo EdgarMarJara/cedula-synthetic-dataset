@@ -1,5 +1,5 @@
 # cedula-synthetic-dataset
-Generador de imágenes sintéticas de cédulas de identidad de República Dominicana para training de modelos de OCR y reconocimiento de documentos
+Generador de imágenes sintéticas de cédulas de identidad de Brasil en este caso para training de modelos de OCR y reconocimiento de documentos, se debe mencionar que este repositorio nace de u generador original que fue obteido de github, el cual en una tera anterior fue utilizada (para generar los templates de las cedulas de repubica dominicana).
 
 ## Instalación
 

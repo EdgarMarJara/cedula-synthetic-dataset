@@ -1,5 +1,8 @@
 # cedula-synthetic-dataset
-Generador de imágenes sintéticas de cédulas de identidad de Brasil en este caso para training de modelos de OCR y reconocimiento de documentos, se debe mencionar que este repositorio nace de u generador original que fue obteido de github, el cual en una tera anterior fue utilizada (para generar los templates de las cedulas de repubica dominicana).
+
+Generador sintético de cédulas brasileñas para entrenamiento de modelos de OCR y reconocimiento documental. Este repositorio surge como extensión de un generador previo basado en templates de identidad, reutilizando la misma arquitectura para facilitar la adaptación y expansión a nuevos países o diseños. En este caso, el foco principal es la cédula brasileña, aunque el proyecto conserva algunos elementos heredados del flujo original dominicano para mantener la estructura modular y reutilizable.
+
+La idea principal es crear datos sintéticos, templates visuales inspirados en documentos reales y una pipeline completa para producir imágenes de anverso y reverso con metadatos asociados, sin utilizar documentos reales ni rostros reales.
 
 ## Instalación
 
@@ -7,14 +10,14 @@ Generador de imágenes sintéticas de cédulas de identidad de Brasil en este ca
 pip install -r requirements.txt
 ```
 
-## Uso rápido
+## Uso rápido para Brasil
 
 ```python
-from cedula_synthetic import DominicanIDGenerator
+from cedula_synthetic import BrazilIDGenerator
 
-generator = DominicanIDGenerator(output_dir="mi_dataset", seed=42)
+generator = BrazilIDGenerator(output_dir="mi_dataset_br", seed=42)
 
-# Generar una sola cédula (anverso + reverso)
+# Generar una sola cédula (frente + dorso)
 front, back, data = generator.generate_single()
 front.save("front.jpg")
 back.save("back.jpg")
@@ -23,25 +26,36 @@ back.save("back.jpg")
 metadata_csv = generator.generate_batch(num_samples=1000)
 ```
 
-También puedes ejecutar los ejemplos incluidos:
+También puedes usar los ejemplos incluidos:
 
 ```bash
-python examples/generate_single_example.py
-python examples/generate_batch_example.py --num-samples 1000 --output-dir synthetic_dataset --seed 42
+python examples/generate_brazil_template_example.py
+python examples/generate_batch_brazil_example.py --num-samples 1000 --output-dir synthetic_dataset_br --seed 42
 ```
 
 ## Estructura del proyecto
 
-- `cedula_synthetic/data_generator.py` – datos sintéticos dominicanos (nombres, cédula, domicilio, fechas, MRZ) usando `Faker`.
-- `cedula_synthetic/templates.py` – templates genéricos de anverso/reverso (o carga de templates propios).
-- `cedula_synthetic/renderer.py` – coloca texto, foto y MRZ sobre los templates.
-- `cedula_synthetic/augmentation.py` – pipeline de aumentación: rotación, perspectiva, brillo/contraste, ruido gaussiano, desenfoque e iluminación.
-- `cedula_synthetic/storage.py` – guarda imágenes y metadatos (CSV) con validación básica.
-- `cedula_synthetic/generator.py` – clase principal `DominicanIDGenerator` que integra todo el pipeline.
-- `examples/` – scripts de ejemplo de uso individual y en batch.
-- `tests/` – pruebas unitarias de cada módulo.
+- `cedula_synthetic/brasil_template.py` – template visual del frente y dorso inspirados en la cédula brasileña, con fondos, cajas de texto, foto y marca de agua.
+- `cedula_synthetic/brasil_data_generator.py` – generación de datos sintéticos brasileños: nombre, nome social, Registro Geral, fechas, naturalidad, filiación, conjunto de datos que alimenta el render.
+- `cedula_synthetic/brasil_renderer.py` – renderizado de texto, foto y MRZ sobre los templates BR.
+- `cedula_synthetic/brasil_generator.py` – clase principal `BrazilIDGenerator` que integra datos, render y almacenamiento.
+- `cedula_synthetic/generator.py` – pipeline principal original para identificación dominicana, mantenido como referencia y base modular.
+- `cedula_synthetic/data_generator.py` – generación de datos sintéticos dominicanos, usada como base para construir variaciones y adaptar nuevos países.
+- `cedula_synthetic/templates.py` – templates alternativos generados para otros diseños de identificación.
+- `cedula_synthetic/augmentation.py` – pipeline de aumentación visual: rotación, perspectiva, brillo/contraste, ruido, desenfoque y variaciones de iluminación.
+- `cedula_synthetic/storage.py` – guarda imágenes y metadatos en CSV con validación básica.
+- `examples/` – scripts de ejemplo para generar templates, batches y muestras aisladas.
+- `tests/` – pruebas unitarias del proyecto.
 
-> **Nota:** No se distribuye ninguna imagen de cédula real ni rostros reales. Los templates y las fotos de rostro se generan de forma programática para evitar cualquier problema de privacidad o derechos de imagen. Si dispones de un template propio (por ejemplo, un diseño oficial en blanco), puedes pasar sus rutas con `front_template_path` / `back_template_path` al crear el `DominicanIDGenerator`.
+## Nota importante
+
+No se distribuye ninguna imagen real de cédulas ni rostros reales. Los templates, textos, fotos sintéticas y los datasets creados se generan de forma programática para evitar problemas de privacidad, derechos de imagen y dependencia de documentos auténticos.
+
+El repositorio está diseñado de forma modular para que sea sencillo:
+- adaptar nuevos países,
+- cambiar layouts,
+- extender tipos de documentos,
+- mantener el código más limpio y escalable que un único archivo monolítico.
 
 ## Tests
 

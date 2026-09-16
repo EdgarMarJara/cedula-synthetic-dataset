@@ -1,0 +1,47 @@
+Como usar este proyecto.
+
+Aca se muentran los cmando a er utilizado para desarrllar el pipeline completo.
+
+1. Instalar dependencias
+   - python3 -m venv .venv
+   - source .venv/bin/activate
+   - pip install -r requirements.txt
+
+2. Ejecutar desde la raíz del proyecto
+   Es importante correr los scripts desde la raíz del repositorio para que Python encuentre el paquete `cedula_synthetic`.
+
+   - PYTHONPATH=. python3 examples/generate_single_example.py
+   - PYTHONPATH=. python3 examples/generate_batch_brazil_example.py --num-samples 100 --output-dir synthetic_dataset_br --seed 42
+
+3. Generar una cédula individual
+   - Ejemplo:
+     - PYTHONPATH=. python3 examples/generate_single_example.py
+   - Esto genera la imagen frontal y trasera junto con su metadata.
+
+4. Generar un lote
+   - Ejemplo:
+     - PYTHONPATH=. python3 examples/generate_batch_brazil_example.py --num-samples 100 --output-dir synthetic_dataset_br --seed 42
+   - Se generarán varias cédulas y se guardarán en la carpeta indicada.
+
+5. Estructura principal
+   - cedula_synthetic/ : lógica del generador, templates y renderizado
+   - examples/ : scripts de uso
+   - elementos/ : recursos gráficos y plantillas
+   - output_single_example/ : salida de ejemplo individual
+   - output_example_split/ : salida de ejemplo dividida
+
+6. Personalizar el proyecto
+   - Ajusta el template del documento dentro de `cedula_synthetic/`
+   - Modifica los campos o datos en los generadores
+   - Cambia la carpeta de salida según tus necesidades
+
+7. Validación
+   - Para comprobar que todo funciona:
+     - python3 -m pytest -q .
+
+Este repositorio está pensado para generar cédulas sintéticas de Brasil con fines de pruebas, visualización y preparación de datasets.
+
+espero que haya sido de ayuda. 
+
+by: edgarmarjara.
+

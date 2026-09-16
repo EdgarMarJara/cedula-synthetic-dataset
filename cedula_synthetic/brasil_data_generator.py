@@ -65,8 +65,8 @@ class BrazilCedulaData:
     birth_date: date
     birth_place: str
     nationality: str
-    father_name: str
-    mother_name: str
+    father_name: str    # Esta linea es la de primer apellido
+    mother_name: str    # Esta linea es la de segundo apellido
     issuer_organ: str
     issue_place: str
     issue_date: date

@@ -1,0 +1,2 @@
+id,front_image,back_image,registro_geral,full_name,social_name,gender_code,gender_label,birth_date,birth_place,nationality,father_name,mother_name,issuer_organ,issue_place,issue_date,expiration_date,mrz_line1,mrz_line2,mrz_line3
+0,front/cedula_000000_front.jpg,back/cedula_000000_back.jpg,00.265.774-7,João Lima Pereira,João Lima Pereira,M,Masculino,1984-03-10,Brasília - Goiás,Brasileira,Matheus Silva Pereira,Juliana Ferreira Pereira,SSP/CE,Recife - Goiás,2012-03-14,2022-03-14,IDBRA002657747<<<<<<<<<<<<<<<<,840310<M220314<BRA<<<<<<<<<<<<,LIMA<PEREIRA<<<<<<<<<<JOÃO<<<<
